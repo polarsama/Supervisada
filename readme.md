@@ -1,85 +1,123 @@
-# Sistema de Optimización de Rutas de Transporte con IA
 
-## Descripción General
-Este proyecto implementa un sistema de optimización de rutas de transporte utilizando técnicas avanzadas de IA, incluyendo Q-learning y redes neuronales, para encontrar rutas óptimas entre estaciones.
+# 🚆 Sistema de Optimización de Rutas de Transporte con IA
 
-## Requisitos Previos
+> Predice tiempos de viaje y encuentra las mejores rutas usando Redes Neuronales y Grafos Inteligentes.
 
-### Versión de Python
-- **Versión Recomendada**: Python 3.8 - 3.11
-- **Versión Mínima**: Python 3.7+
+![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-### Bibliotecas Necesarias
-Antes de ejecutar el proyecto, asegúrate de tener instaladas las siguientes bibliotecas de Python:
-- numpy
-- networkx
-- scikit-learn
-- tensorflow
-- json (generalmente incluido por defecto)
+---
 
-### Instalación
-Puedes instalar las bibliotecas necesarias usando pip:
+## 📚 Tabla de Contenidos
+- [📚 Tabla de Contenidos](#-tabla-de-contenidos)
+- [📖 Descripción General](#-descripción-general)
+- [🛠️ Requisitos Previos](#️-requisitos-previos)
+- [📂 Estructura del Proyecto](#-estructura-del-proyecto)
+- [⚙️ Pasos de Ejecución](#️-pasos-de-ejecución)
+- [✨ Características Principales](#-características-principales)
+- [📈 Salida](#-salida)
+- [🧩 Personalización](#-personalización)
+
+---
+
+## 📖 Descripción General
+Este proyecto implementa un sistema de optimización de rutas de transporte utilizando técnicas de Inteligencia Artificial **supervisada** a través de redes neuronales.  
+Predice los tiempos de viaje entre estaciones y calcula rutas óptimas en función de dichas predicciones.
+
+---
+
+## 🛠️ Requisitos Previos
+
+### 🔥 Versión de Python
+- **Recomendada**: Python 3.8 - 3.11
+- **Mínima**: Python 3.7+
+
+### 📦 Librerías Necesarias
+Instala los paquetes requeridos ejecutando:
 
 ```bash
 pip install numpy networkx scikit-learn tensorflow
 ```
 
-## Estructura del Proyecto
-- `main.py`: Script principal que contiene las clases del sistema de transporte con IA
-- `datos.json`: Archivo de entrada con información de estaciones y conexiones
-- `Resultados.json`: Archivo de salida con resultados de optimización de rutas
+> Nota: `json` ya está incluido por defecto en Python.
 
-## Pasos de Ejecución
+---
 
-1. Preparar Datos de Entrada
-   Crea un archivo `datos.json` con la siguiente estructura:
-   ```json
-   {
-     "estaciones": [
-       {
-         "id": "EST1",
-         "lineas": ["L1", "L2"],
-         "nombre": "Estación Central"
-       }
-     ],
-     "conexiones": [
-       {
-         "origen": "EST1",
-         "destino": "EST2",
-         "tiempo": 10,
-         "distancia": 5,
-         "linea": "L1"
-       }
-     ],
-     "reglas": [
-       {
-         "tipo": "mantenimiento_tramo",
-         "origen": "EST1",
-         "destino": "EST2"
-       }
-     ]
-   }
-   ```
+## 📂 Estructura del Proyecto
+| Archivo        | Descripción                                              |
+|----------------|-----------------------------------------------------------|
+| `main.py`      | Script principal que entrena el modelo y optimiza rutas.  |
+| `datos.json`   | Datos de entrada: estaciones, conexiones y reglas.        |
+| `Resultados.json` | Resultados generados: rutas optimizadas y reportes. |
 
-2. Ejecutar el Script
-   ```bash
-   python main.py
-   ```
+---
 
-## Características Principales
-- Optimización de rutas mediante Q-learning
-- Predicción de tiempos de viaje con redes neuronales
-- Consideración de reglas de mantenimiento y congestión
-- Análisis detallado de rutas
+## ⚙️ Pasos de Ejecución
 
-## Salida
-Después de la ejecución, el script genera un archivo `Resultados.json` que contiene:
-- Rutas óptimas entre todas las combinaciones de estaciones
-- Tiempos de viaje predichos
-- Información detallada de las estaciones
+1. **Preparar el Archivo `datos.json`**  
+Ejemplo de estructura:
 
-## Personalización
-Modifica `datos.json` para:
-- Agregar/eliminar estaciones
-- Definir reglas de conexión
-- Ajustar parámetros de mantenimiento y congestión
+```json
+{
+  "estaciones": [
+    {
+      "id": "EST1",
+      "lineas": ["L1", "L2"],
+      "nombre": "Estación Central"
+    }
+  ],
+  "conexiones": [
+    {
+      "origen": "EST1",
+      "destino": "EST2",
+      "tiempo": 10,
+      "distancia": 5,
+      "linea": "L1"
+    }
+  ],
+  "reglas": [
+    {
+      "tipo": "mantenimiento_tramo",
+      "origen": "EST1",
+      "destino": "EST2"
+    }
+  ]
+}
+```
+
+2. **Ejecutar el Script**
+
+```bash
+python main.py
+```
+
+---
+
+## ✨ Características Principales
+- 🧠 Predicción de tiempos de viaje con **redes neuronales**.
+- 🛤️ Optimización de rutas en grafos ponderados dinámicamente.
+- 🚧 Soporte para reglas de **mantenimiento** y **congestión**.
+- 🔎 Análisis detallado de cada ruta y tiempos por tramo.
+- 📝 Registro de rutas exitosas y rutas fallidas.
+
+---
+
+## 📈 Salida
+Después de la ejecución, se generará el archivo `Resultados.json` que incluirá:
+- ✅ Rutas óptimas entre todas las combinaciones posibles de estaciones.
+- ⏱️ Tiempos predichos de viaje (por tramo y total).
+- 🗺️ Información detallada de las estaciones.
+- 🚫 Registro de rutas no posibles debido a restricciones.
+
+---
+
+## 🧩 Personalización
+Puedes adaptar el comportamiento del sistema modificando `datos.json`:
+- ➕ Añadir o eliminar estaciones.
+- 🔗 Crear nuevas conexiones o modificar tiempos y distancias.
+- ⚠️ Definir reglas de mantenimiento o congestión que alteren la red.
+
+---
+
+> Desarrollado con ❤️ y pasión por la IA.
