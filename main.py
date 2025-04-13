@@ -35,10 +35,10 @@ class SistemaDeTransporteIA:
             peso = self._calcular_peso_conexion(conexion)
 
             G.add_edge(origen, destino,
-                       tiempo=conexion.get('tiempo', 10),
-                       distancia=conexion.get('distancia', 1),
-                       linea=conexion.get('linea', 'desconocida'),
-                       peso=peso)
+                        tiempo=conexion.get('tiempo', 10),
+                        distancia=conexion.get('distancia', 1),
+                        linea=conexion.get('linea', 'desconocida'),
+                        peso=peso)
 
         return G
 
@@ -107,6 +107,16 @@ class SistemaDeTransporteIA:
 
             G_predicho[u][v]['peso_predicho'] = max(5, tiempo_predicho)
 
+        #  Validamos que el origen y destino existan en el grafo
+        if origen not in G_predicho.nodes:
+            raise ValueError(f"El origen {origen} no existe en el grafo.")
+        if destino not in G_predicho.nodes:
+            raise ValueError(f"El destino {destino} no existe en el grafo.")
+
+        #  Validamos que exista camino entre ellos
+        if not nx.has_path(G_predicho, origen, destino):
+            raise ValueError(f"No hay ruta disponible de {origen} a {destino}.")
+
         ruta = nx.dijkstra_path(G_predicho, origen, destino, weight='peso_predicho')
 
         tiempos_predichos = []
@@ -161,14 +171,23 @@ def main():
     print(f"Total de rutas a calcular: {len(rutas_ejemplo)}")
 
     resultados = []
+    rutas_fallidas = []
+
     for i, (origen, destino) in enumerate(rutas_ejemplo, 1):
         if origen != destino:
             print(f"Calculando ruta {i}/{len(rutas_ejemplo)}: {origen} → {destino}")
 
-            ruta = sistema.encontrar_ruta_ia(origen, destino)
-            resultados.append(ruta)
+            try:
+                ruta = sistema.encontrar_ruta_ia(origen, destino)
+                resultados.append(ruta)
+            except ValueError as e:
+                print(f"⚠️ {e}")
+                rutas_fallidas.append({"origen": origen, "destino": destino, "error": str(e)})
 
-    resultados_json = convertir_numpy_a_json(resultados)
+    resultados_json = {
+        "rutas_calculadas": convertir_numpy_a_json(resultados),
+        "rutas_fallidas": rutas_fallidas
+    }
 
     with open('Resultados.json', 'w', encoding='utf-8') as f:
         json.dump(resultados_json, f, ensure_ascii=False, indent=2)
@@ -179,6 +198,7 @@ def main():
     print(f"\n✅ Proceso completado.")
     print(f"🕒 Tiempo total de ejecución: {tiempo_ejecucion:.2f} segundos")
     print(f"📄 Resultados guardados en 'Resultados.json'")
+    print(f"🚫 Total de rutas fallidas: {len(rutas_fallidas)}")
 
 if __name__ == "__main__":
     main()
